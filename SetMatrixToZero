@@ -1,0 +1,52 @@
+Link: https://leetcode.com/problems/set-matrix-zeroes/description/
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        //optimized one to use hash kind of
+        //we will take the first col and the first row as our hash and we will modify them
+        // col = matrix[0][j] row = matrix[i][0];
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+
+        // now iterate through the 1st row and the 1st col, to check if we have something marked as 0
+        //also we will first fill the column then the row
+
+        int col0=1; //this is one extra, consider top of that matrix[0][0]; as we don't want to interfere in the row calculations
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<cols; j++){
+                if(matrix[i][j]==0){
+                    //considering the first row and the first col
+                    //the ith row
+                    matrix[i][0] = 0;
+
+                    //ith col
+                    if(j!=0){
+                        matrix[0][j]=0;
+                    } else{
+                        col0=0;
+                    }
+                }
+            }
+        }
+
+        //now iterate again and put the others apart from the hash one as 0 according to the hash value
+        for(int i=1; i<rows; i++){
+            for(int j=1; j<cols; j++){
+                //check if it is not 0 but the hash value is
+                if(matrix[i][j]!=0){
+                    if(matrix[i][0]==0 || matrix[0][j]==0){
+                        matrix[i][j]=0;
+                    }
+                }
+            }
+        }
+        //check if the first element is itself 0 then we have to make the hash accordingly 0
+        if(matrix[0][0]==0){
+            for(int j=0; j<cols; j++) matrix[0][j] =0;
+        }
+        if(col0==0){
+            for(int i=0; i<rows; i++) matrix[i][0]=0;
+        }
+    }
+};

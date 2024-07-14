@@ -1,0 +1,36 @@
+//tortosise method
+https://leetcode.com/problems/find-the-duplicate-number/
+
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        //Many approaches are there but this slow fast is the best----> tortoise method
+        int slow = nums[0];
+        int fast = nums[0];
+        do{
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+
+        } while(slow!=fast);
+        //verifying the loop
+        slow = nums[0];
+        while(slow!=fast){
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return slow;
+    }
+};
+/*
+slow = 1
+fast =  1
+
+slow = 3
+fast = 2
+
+slow = 2
+fast = 2
+
+slow = 2
+fast = 2
+*/

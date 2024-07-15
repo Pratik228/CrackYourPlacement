@@ -1,0 +1,20 @@
+https://leetcode.com/problems/minimum-moves-to-equal-array-elements/
+
+Easy one math operation
+
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        int minmoves = 0;
+        int mini = INT_MAX;
+        for(int i=0; i<nums.size(); i++){
+            mini = min(nums[i], mini);
+        }
+
+        for(int i=0; i<nums.size(); i++){
+            minmoves+=(nums[i]-mini);
+        }
+
+        return minmoves;
+    }
+};

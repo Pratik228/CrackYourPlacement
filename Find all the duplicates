@@ -1,5 +1,5 @@
 Find Duplicates, two approach better and the best
-
+https://leetcode.com/problems/find-all-duplicates-in-an-array/
 class Solution {
 public:
     //this approach takes O(nlogn + n) //not that efficient

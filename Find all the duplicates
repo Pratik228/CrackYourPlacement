@@ -1,0 +1,33 @@
+Find Duplicates, two approach better and the best
+
+class Solution {
+public:
+    //this approach takes O(nlogn + n) //not that efficient
+    // vector<int> findDuplicates(vector<int>& nums) {
+    //     int n = nums.size();
+    //     vector<int> ans;
+    //     sort(nums.begin(), nums.end());
+    //     for(int i=0; i<n-1; i++){
+    //         if((nums[i] ^ nums[i+1])==0){
+    //             ans.push_back(nums[i]);
+    //         }
+    //     }
+    //     return ans;
+    // }
+
+    //we will use some maths to mark the index of the elements---> this will take O(n) and O(1)
+    vector<int> findDuplicates(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans;
+        for(int i=0; i<n; i++){
+            int idx = abs(nums[i]) -1;
+            if(nums[idx]<0){
+                ans.push_back(abs(nums[i]));
+            } else{
+                nums[idx] = -nums[idx];
+            }
+        }
+        return ans;
+    }
+};
+

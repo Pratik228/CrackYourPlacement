@@ -1,0 +1,28 @@
+https://leetcode.com/problems/subarray-sum-equals-k/
+prefix sum kind of approach don't get confused with sliding window here
+
+The sliding window approach you have implemented is a common technique for subarray problems, 
+but it won't work correctly for the "Subarray Sum Equals K" problem because the sliding window technique 
+requires non-negative numbers for it to function correctly. When dealing with both positive and negative numbers, 
+this approach might miss some valid subarrays or count some invalid ones. hence we used a hashmap to store the cumulative sum and 
+its frequency to solve this problem efficiently.
+
+
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int n = nums.size();
+        int count=0;
+        int sum=0;
+        unordered_map<int, int> mp;
+        mp[0] =1; // the case when sum==k
+        for(int i=0; i<n; i++){
+            sum+=nums[i];
+            if(mp.find(sum-k)!=mp.end()){
+                count+= mp[sum-k];
+            } 
+            mp[sum]++;
+        }
+        return count;
+    }
+};

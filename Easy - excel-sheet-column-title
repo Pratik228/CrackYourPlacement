@@ -1,0 +1,21 @@
+Convert to excel really nice problem need to think deeply and analyze so nice question
+https://leetcode.com/problems/excel-sheet-column-title/
+
+class Solution {
+public:
+    string convertToTitle(int columnNumber) {
+        string ans = "";
+        while(columnNumber>0){
+            columnNumber--;
+            int rem = columnNumber%26;
+            ans += char('A'+ rem);
+            cout<<ans;
+            columnNumber/=26;
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+// 700---> rem 24---> 1+26--> 27--->Y
+// 700/26 ---> 26---->25+1-->26--->Z

@@ -1,0 +1,22 @@
+Little tough https://leetcode.com/problems/longest-repeating-character-replacement/
+
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        unordered_map<char, int> mp;
+        int n = s.size();
+        int i=0, j=0, length = 0, count=0;
+        while(j<n){
+            mp[s[j]]++;
+            count = max(count, mp[s[j]]);
+            if(j-i+1-count>k){
+                mp[s[i]]--;
+                i++;
+            }else{
+                length = max(length, j-i+1);
+            }
+            j++;
+        }
+        return length;
+    }
+};

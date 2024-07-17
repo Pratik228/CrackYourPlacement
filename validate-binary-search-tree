@@ -1,4 +1,4 @@
-Validate BST same with min max: https://leetcode.com/problems/unique-binary-search-trees-ii/description/
+Validate BST same with min max: https://leetcode.com/problems/validate-binary-search-tree/description/
 
 /**
  * Definition for a binary tree node.

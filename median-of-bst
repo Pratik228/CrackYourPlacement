@@ -1,0 +1,25 @@
+find median: https://www.geeksforgeeks.org/problems/median-of-bst/1
+
+void inorder(struct Node *root, vector<int>&inord){
+    if(root==NULL) return;
+    inorder(root->left, inord);
+    inord.push_back(root->data);
+    inorder(root->right, inord);
+    
+}
+float findMedian(struct Node *root)
+{
+      //Code here
+      vector<int> inord;
+      inorder(root, inord);
+      int s = inord.size();
+      float ans;
+      if(s%2!=0){
+          ans = inord[s/2];
+      }
+      else {
+          ans = inord[s/2] + inord[(s/2)-1];
+          ans = ans/2;
+      }
+      return ans;
+}

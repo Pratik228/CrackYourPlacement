@@ -1,0 +1,48 @@
+https://leetcode.com/problems/sum-of-distances-in-tree/
+
+class Solution {
+public:
+    vector<vector<int>> adj;
+    vector<int> calsize;
+    vector<int> caldist;
+    vector<int> result;
+
+    void postOrderDFS(int node, int parent){
+        calsize[node]=1;
+        caldist[node]=0;
+        for(auto it: adj[node]){
+            if(it==parent) continue;
+            postOrderDFS(it, node);
+
+            calsize[node] += calsize[it];
+            caldist[node] += calsize[it] + caldist[it];
+
+        }
+    }
+
+    void preOrderDFS(int node, int parent, int n){
+        for(auto it: adj[node]){
+            if(it==parent) continue;
+            result[it] = result[node] - calsize[it] + (n - calsize[it]);
+            preOrderDFS(it, node, n);
+
+        }
+
+    }
+
+    vector<int> sumOfDistancesInTree(int n, vector<vector<int>>& edges) {
+        adj.resize(n);
+        calsize.resize(n, 0);
+        caldist.resize(n, 0);
+        result.resize(n, 0);
+        for(auto it: edges){
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        postOrderDFS(0, -1);
+        result[0] = caldist[0];
+        preOrderDFS(0, -1, n);
+        return result;
+    }
+};

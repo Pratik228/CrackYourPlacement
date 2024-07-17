@@ -1,0 +1,33 @@
+Largest BST toughest: https://www.geeksforgeeks.org/problems/largest-bst/1
+
+class NodeValue{
+    public:
+    int maxSize,minVal,maxVal;
+    NodeValue(int maxSize, int minVal, int maxVal){
+        this->maxSize=maxSize;
+        this->minVal = minVal;
+        this->maxVal = maxVal;
+    }
+};
+
+class Solution{
+    public:
+    NodeValue largestBSTSize(Node* root){
+        if(!root) return NodeValue(0, INT_MAX, INT_MIN);
+        auto left = largestBSTSize(root->left);
+        auto right = largestBSTSize(root->right);
+        if(root->data>left.maxVal && root->data<right.minVal){
+            return NodeValue(1+left.maxSize + right.maxSize, 
+            min(root->data, left.minVal), max(root->data, right.maxVal));
+        }
+        return NodeValue(max(left.maxSize, right.maxSize), INT_MIN, INT_MAX);
+        
+    }
+    /*You are required to complete this method */
+    // Return the size of the largest sub-tree which is also a BST
+    int largestBst(Node *root)
+    {
+    	//Your code here
+    	return largestBSTSize(root).maxSize;
+    	
+    }

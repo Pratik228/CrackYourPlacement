@@ -1,0 +1,14 @@
+Convert preorder to BST, try to convert into inorder first like this
+
+Node* buildTree(int pre[], int &i, int s, int bound){
+        if(i>=s || pre[i]>bound) return NULL;
+        Node* temp = newNode(pre[i++]);
+        temp->left = buildTree(pre, i, s, temp->data);
+        temp->right = buildTree(pre, i, s, bound);
+        return temp;
+    }
+    Node* Bst(int pre[], int size) {
+        // code here
+        int i=0;
+        return buildTree(pre, i,size, INT_MAX);
+    }

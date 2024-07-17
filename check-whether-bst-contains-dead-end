@@ -1,0 +1,18 @@
+https://www.geeksforgeeks.org/problems/check-whether-bst-contains-dead-end/1
+
+bool isDead(Node *root, int lowerB, int upperB){
+        if(root==NULL) return false;
+        if(root->left==NULL && root->right==NULL){
+            if(root->data-lowerB==1 && upperB-root->data==1){
+                return true;
+            }
+            return false;
+        }
+        return isDead(root->left, lowerB, root->data) || isDead(root->right, 
+        root->data, upperB);
+    }
+    bool isDeadEnd(Node *root)
+    {
+        //Your code here
+        return isDead(root, 0, INT_MAX);
+    }

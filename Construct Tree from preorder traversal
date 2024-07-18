@@ -1,0 +1,19 @@
+https://www.geeksforgeeks.org/problems/construct-tree-from-preorder-traversal/1
+
+Node* createTree(int &idx, int n, int pre[], char preLN[]){
+    if(idx>=n) return NULL;
+    Node* node = new Node(pre[idx]);
+    if(preLN[idx]=='L') return node;
+    idx+=1;
+    node->left = createTree(idx, n, pre, preLN);
+    idx+=1;
+    node->right = createTree(idx, n, pre, preLN);
+    return node;
+}
+struct Node *constructTree(int n, int pre[], char preLN[])
+{
+    // Code here
+    int idx=0;
+    Node* root= createTree(idx, n, pre, preLN);
+    return root;
+}

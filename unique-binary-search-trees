@@ -1,0 +1,36 @@
+https://leetcode.com/problems/unique-binary-search-trees/
+
+class Solution {
+public:
+    int numTrees(int n) {
+        //DP---> catalan number c[i]*c[n-i-1] ka summation
+        vector<int> dp(n+1, 0);
+        dp[0]=dp[1]=1;
+        for(int i=2; i<=n; i++){//nodes root
+            for(int j=0; j<i; j++){//other node config
+                dp[i] += dp[j]*dp[i-j-1];
+            }
+        }
+        return dp[n];
+    }
+};
+//catalan calulation formula----> C(n) = Ci(2n,n)/n+1
+
+class Solution {
+public:
+    long CalculateCoeff(int n,int k) //Function to calculate Ci(n.k)
+    {
+        long res=1;
+        if(k>n-k)
+            k=n-k;                    //Since Ci(n,k)=Ci(n,n-k), property of binomial coefficients
+        for(int i=0;i<k;i++)
+        {
+            res*=(n-i);
+            res/=(i+1);
+        }
+        return res;
+    }
+    int numTrees(int n) {
+        return CalculateCoeff(2*n,n)/(n+1);
+    }
+};

@@ -1,0 +1,25 @@
+https://www.geeksforgeeks.org/problems/bipartite-graph/1
+
+bool dfs(int node,int color, vector<int>adj[], vector<int> &vis){
+        vis[node]=color;
+        for(auto it: adj[node]){
+            if(vis[it]==-1){
+                if(dfs(it, !color, adj, vis)==false) return false;
+            } else if(vis[it]==color){
+                return false;
+            }
+        }
+        return true;
+    }
+	bool isBipartite(int V, vector<int>adj[]){
+	    // Code here
+	    vector<int> vis(V,-1);
+	    
+	    for(int it=0; it<V; it++){
+	        if(vis[it]==-1){
+	            if(dfs(it,0, adj, vis)==false) return false;
+	        }
+	    }
+	    return true;
+	    
+	}

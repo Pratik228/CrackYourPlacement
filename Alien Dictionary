@@ -1,0 +1,54 @@
+https://www.geeksforgeeks.org/problems/alien-dictionary/1
+
+vector<int> toposort(int V, vector<int> adj[]){
+        vector<int> indegree(V, 0);
+        for(int i = 0; i < V; i++){
+            for(auto it: adj[i]){
+                indegree[it]++;
+            }
+        }
+        
+        queue<int> q;
+        for(int i = 0; i < V; i++){
+            if(indegree[i] == 0){
+                q.push(i);
+            }
+        }
+
+        vector<int> total;
+        while(!q.empty()){
+            int node = q.front();
+            total.push_back(node);
+            q.pop();
+
+            for(auto it: adj[node]){
+                indegree[it]--;
+                if(indegree[it] == 0){
+                    q.push(it);
+                }
+            }
+        }
+        return total;
+    }
+    public:
+    string findOrder(string dict[], int N, int K) {
+        //code here
+       vector<int> adj[K];
+       for(int i=0; i<N-1; i++){
+           string str1 = dict[i];
+           string str2 = dict[i+1];
+           int len = min(str1.size(), str2.size());
+           for(int ptr=0; ptr<len; ptr++){
+               if(str1[ptr]!= str2[ptr]){
+                   adj[str1[ptr]-'a'].push_back(str2[ptr]-'a');
+                   break;
+               }
+           }
+       }
+       vector<int> ans = toposort(K, adj);
+       string res="";
+       for(int i=0; i<ans.size(); i++){
+           res += ans[i] + 'a';
+       }
+       return res;
+    }

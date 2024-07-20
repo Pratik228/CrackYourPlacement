@@ -1,0 +1,22 @@
+class solution {
+  public:
+
+    long long multiplyTwoLists(Node* first, Node* second) {
+        Node* p1 = first;
+        Node* p2 = second;
+        long long mul1=0, mul2=0;
+        long long mod = 1e9+7;
+        while(p1!=NULL){
+            mul1 = (mul1*10)%mod+p1->data;
+            p1 = p1->next;
+        }
+        while(p2!=NULL){
+            mul2 = (mul2*10)%mod+p2->data;
+            p2= p2->next;
+        }
+
+        // Reverse the result to get the final output
+        long long result = (mul1*mul2)%mod;
+        return result;
+    }
+};

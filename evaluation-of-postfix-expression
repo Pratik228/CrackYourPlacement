@@ -1,0 +1,42 @@
+https://www.geeksforgeeks.org/problems/evaluation-of-postfix-expression1735/1
+int evaluate(int op1, int op2, char opr){
+        int ans;
+        switch(opr){
+            case '+': 
+            ans = op1 + op2;
+            break;
+            
+            case '-': 
+            ans= op2 - op1;
+            break;
+            
+            case '*': 
+            ans = op1 * op2;
+            break;
+            
+            case '/': 
+            ans = op2 / op1;
+            break;
+            default:
+                ans=0;
+                break;
+        }
+        return ans;
+    }
+    int evaluatePostfix(string S)
+    {
+        // Your code here
+        stack<int> st;
+        for(int i=0; i<S.size(); i++){
+            if(isdigit(S[i])) st.push(S[i]-'0');
+            else{
+                int first = st.top();
+                st.pop();
+                int second = st.top();
+                st.pop();
+                int ans = evaluate(first, second, S[i]);
+                st.push(ans);
+            }
+        }
+        return st.top();
+    }

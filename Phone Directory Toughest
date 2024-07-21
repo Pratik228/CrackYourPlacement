@@ -1,0 +1,93 @@
+struct Node {
+    Node* links[26];
+    bool flag;
+
+    Node() {
+        for (int i = 0; i < 26; i++) {
+            links[i] = NULL;
+        }
+        flag = false;
+    }
+
+    bool containsKey(char ch) {
+        return links[ch - 'a'] != NULL;
+    }
+
+    void put(char ch) {
+        links[ch - 'a'] = new Node();
+    }
+
+    Node* get(char ch) {
+        return links[ch - 'a'];
+    }
+
+    void setEnd() {
+        flag = true;
+    }
+
+    bool isEnd() {
+        return flag;
+    }
+};
+
+class Solution {
+private:
+    Node* root;
+
+    void insert(string word) {
+        Node* node = root;
+        for (char c : word) {
+            if (!node->containsKey(c)) {
+                node->put(c);
+            }
+            node = node->get(c);
+        }
+        node->setEnd();
+    }
+
+    void printAll(string str, vector<string>& temp, Node* node) {
+        if (node->isEnd()) {
+            temp.push_back(str);
+        }
+        for (char c = 'a'; c <= 'z'; c++) {
+            if (node->containsKey(c)) {
+                printAll(str + c, temp, node->get(c));
+            }
+        }
+    }
+
+public:
+    Solution() {
+        root = new Node();
+    }
+
+    vector<vector<string>> displayContacts(int n, string contact[], string s) {
+        for (int i = 0; i < n; i++) {
+            insert(contact[i]);
+        }
+
+        vector<vector<string>> ans;
+        Node* node = root;
+        string prefix = "";
+
+        for (char c : s) {
+            if (node->containsKey(c)) {
+                prefix += c;
+                node = node->get(c);
+                vector<string> temp;
+                printAll(prefix, temp, node);
+                sort(temp.begin(), temp.end());
+                ans.push_back(temp);
+            } else {
+                ans.push_back({"0"});
+                break;
+            }
+        }
+
+        while (ans.size() < s.length()) {
+            ans.push_back({"0"});
+        }
+
+        return ans;
+    }
+};

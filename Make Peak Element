@@ -1,0 +1,13 @@
+int findPeak(vector<int>& arr){
+    int peak;
+    int n = arr.size();
+    if(n%2!=0) peak = arr[n/2];
+    else{
+        peak = (arr[n/2] + arr[(n-2)/2])/2;
+    }
+    int ans = 0;
+    for(int i=0; i<n; i++){
+        ans+=abs(peak-arr[i]);
+    }
+    return ans;
+}

@@ -14,13 +14,11 @@ public:
                 }
             }
             else{
-                if(nums[mid]>=nums[low]){
                 if(target<=nums[high] && target>nums[mid]){
                     low = mid+1;
                 } else{
                     high=mid-1;
                     }
-                }
             }
             
         }

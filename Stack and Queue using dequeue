@@ -1,0 +1,64 @@
+Stack:
+class Stack {
+private:
+    std::deque<int> dq;
+public:
+    void push(int x) {
+        dq.push_front(x);
+    }
+    
+    void pop() {
+        if (!dq.empty()) {
+            dq.pop_front();
+        } else {
+            std::cerr << "Stack is empty!" << std::endl;
+        }
+    }
+    
+    int top() {
+        if (!dq.empty()) {
+            return dq.front();
+        } else {
+            std::cerr << "Stack is empty!" << std::endl;
+            return -1; 
+        }
+    }
+    
+    bool empty() {
+        return dq.empty();
+    }
+};
+
+
+
+Queue:
+
+class Queue {
+private:
+    std::deque<int> dq;
+public:
+    void enqueue(int x) {
+        dq.push_back(x);
+    }
+    
+    void dequeue() {
+        if (!dq.empty()) {
+            dq.pop_front();
+        } else {
+            std::cerr << "Queue is empty!" << std::endl;
+        }
+    }
+    
+    int front() {
+        if (!dq.empty()) {
+            return dq.front();
+        } else {
+            std::cerr << "Queue is empty!" << std::endl;
+            return -1;
+        }
+    }
+    
+    bool empty() {
+        return dq.empty();
+    }
+};

@@ -1,0 +1,58 @@
+class Solution {
+public:
+    vector<pair<int, int>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    
+    bool dfs(vector<vector<char>>& board, string& word, int row, int col, int idx, vector<vector<bool>>& visited) {
+        if (idx == word.length()) return true;
+        if (row < 0 || col < 0 || row >= board.size() || col >= board[0].size() || 
+            visited[row][col] || board[row][col] != word[idx]) {
+            return false;
+        }
+        
+        visited[row][col] = true;
+        
+        for (auto& dir : directions) {
+            int newRow = row + dir.first;
+            int newCol = col + dir.second;
+            if (dfs(board, word, newRow, newCol, idx + 1, visited)) {
+                return true;
+            }
+        }
+        
+        visited[row][col] = false;
+        return false;
+    }
+    
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size();
+        int n = board[0].size();
+        
+        // Early termination
+        if (word.length() > m * n) return false;
+        
+        // Count frequency of first and last character
+        int firstCount = 0, lastCount = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == word[0]) firstCount++;
+                if (board[i][j] == word.back()) lastCount++;
+            }
+        }
+        
+        // Reverse word if it's more efficient
+        if (lastCount < firstCount) {
+            reverse(word.begin(), word.end());
+        }
+        
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == word[0]) {
+                    if (dfs(board, word, i, j, 0, visited)) return true;
+                }
+            }
+        }
+        return false;
+    }
+};

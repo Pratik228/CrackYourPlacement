@@ -1,0 +1,43 @@
+class Solution {
+public:
+    ListNode* segregateEvenOdd(ListNode* head) {
+        if (head == nullptr) return nullptr;
+
+        ListNode *evenStart = nullptr, *evenEnd = nullptr;
+        ListNode *oddStart = nullptr, *oddEnd = nullptr;
+        ListNode *curr = head;
+        while (curr != nullptr) {
+            int val = curr->val;
+
+            if (val % 2 == 0) {
+                // Even node
+                if (evenStart == nullptr) {
+                    evenStart = curr;
+                    evenEnd = evenStart;
+                } else {
+                    evenEnd->next = curr;
+                    evenEnd = evenEnd->next;
+                }
+            } else {
+                // Odd node
+                if (oddStart == nullptr) {
+                    oddStart = curr;
+                    oddEnd = oddStart;
+                } else {
+                    oddEnd->next = curr;
+                    oddEnd = oddEnd->next;
+                }
+            }
+
+            curr = curr->next;
+        }
+
+        if (evenStart == nullptr || oddStart == nullptr) {
+            return head;
+        }
+        evenEnd->next = oddStart;
+        oddEnd->next = nullptr;
+
+        return evenStart;
+    }
+};

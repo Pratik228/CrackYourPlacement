@@ -1,0 +1,55 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+bool canPlaceCows(vector<int>& stalls, int dist, int cows){
+	int countCows=1;
+	int last = stalls[0];
+	for(int i=1; i<stalls.size(); i++){
+		if((stalls[i]-last)>=dist){
+			countCows++;
+			last=stalls[i];
+		}
+		if(countCows>=cows) return true;
+	}
+	return false;
+}
+
+int largestMinDistance(vector<int>& stalls, int C) {
+    sort(stalls.begin(), stalls.end()); 
+    
+    int low = 1;  
+    int high = stalls.back() - stalls.front();  
+    int best = 0;
+    
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (canPlaceCows(stalls, C, mid)) {
+            best = mid;  
+            low = mid + 1;
+        } else {
+            high = mid - 1; 
+        }
+    }
+    
+    return best;
+}
+
+int main() {
+    int t;
+    cin >> t;
+    
+    while (t--) {
+        int N, C;
+        cin >> N >> C;
+        
+        vector<int> stalls(N);
+        for (int i = 0; i < N; ++i) {
+            cin >> stalls[i];
+        }
+        
+        cout << largestMinDistance(stalls, C) << endl;
+    }
+    
+    return 0;
+}

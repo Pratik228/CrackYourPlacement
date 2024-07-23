@@ -1,0 +1,50 @@
+class Solution {
+public:
+    void merge(vector<pair<int, int>> &numsWithIndex, int left, int mid, int right, vector<int> &result){
+        vector<pair<int, int>> temp(right-left+1);
+        int i=left, j=mid+1, k=0;
+        int count=0;
+        while(i<=mid && j<=right){
+            if(numsWithIndex[i].first <= numsWithIndex[j].first){
+                result[numsWithIndex[i].second] +=count;
+                temp[k++] = numsWithIndex[i++];
+            } else{
+                count++;
+                temp[k++] = numsWithIndex[j++];
+            }
+
+        }
+        while (i <= mid) {
+            result[numsWithIndex[i].second] += count;
+            temp[k++] = numsWithIndex[i++];
+        }
+        
+        while (j <= right) {
+            temp[k++] = numsWithIndex[j++];
+        }
+
+        for (i = left; i <= right; ++i) {
+            numsWithIndex[i] = temp[i - left];
+        }
+    }
+
+    void mergeSort(vector<pair<int, int>> &numsWithIndex, int left, int right, vector<int> &result){
+        if(left>=right) return;
+
+        int mid = ((left+right)>>1);
+        mergeSort(numsWithIndex, left, mid, result);
+        mergeSort(numsWithIndex, mid+1, right, result);
+        merge(numsWithIndex, left, mid, right, result);
+    }
+    
+    vector<int> countSmaller(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> result(n, 0);
+        vector<pair<int, int>> numsWithIndex(n);
+        for(int i=0; i<nums.size(); i++){
+            numsWithIndex[i] = {nums[i], i};
+        }
+        mergeSort(numsWithIndex, 0, n-1, result);
+        return result;
+    }
+};

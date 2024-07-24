@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        //can be solved using partion dp but O(n^2)
+        double i =1, j=1;
+        int n = nums.size();
+        double maxi = INT_MIN;
+        for(int k=0; k<n; k++){
+            i *= nums[k];
+            j *= nums[n-k-1];
+            maxi =  max( { maxi, i, j } );
+
+            if(i==0) i=1;
+            if(j==0) j=1;
+        }
+        return maxi;
+    }
+};

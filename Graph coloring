@@ -1,0 +1,32 @@
+class Solution {
+private:
+    bool isSafe(int node, vector<vector<int>>& graph, vector<int>& color, int c) {
+        for (int neighbor : graph[node]) {
+            if (color[neighbor] == c) return false;
+        }
+        return true;
+    }
+    
+    bool colorGraph(int node, vector<vector<int>>& graph, vector<int>& color, int m) {
+        if (node == graph.size()) return true;
+        
+        for (int c = 1; c <= m; c++) {
+            if (isSafe(node, graph, color, c)) {
+                color[node] = c;
+                if (colorGraph(node + 1, graph, color, m)) return true;
+                color[node] = 0;  // Backtrack
+            }
+        }
+        
+        return false;
+    }
+
+public:
+    vector<int> graphColoring(vector<vector<int>>& graph, int m) {
+        int n = graph.size();
+        vector<int> color(n, 0);
+        
+        if (colorGraph(0, graph, color, m)) return color;
+        return {}; 
+    }
+};

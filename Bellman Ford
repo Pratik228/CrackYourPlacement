@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool isNegativeCycle(int n, vector<vector<int>>& edges) {
+        vector<int> dist(n, INT_MAX);
+        dist[0] = 0;
+
+        // Relax all edges n-1 times
+        for (int i = 1; i < n; i++) {
+            for (const auto& edge : edges) {
+                int u = edge[0], v = edge[1], weight = edge[2];
+                if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                }
+            }
+        
+        for (const auto& edge : edges) {
+            int u = edge[0], v = edge[1], weight = edge[2];
+            if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+                return true;  // Negative cycle detected
+            }
+        }
+
+        return false; 
+    }
+};

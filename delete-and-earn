@@ -1,0 +1,35 @@
+similar to house robber, I did with both approaches
+
+class Solution {
+public:
+    int solve(vector<int>& sum, int idx, vector<int> &dp){
+        if(idx >= sum.size()) return 0;
+        if(dp[idx]!=-1) return dp[idx];
+        int notPick = solve(sum, idx+1, dp);
+        int pick = sum[idx];
+        if(idx+2< sum.size()){
+            pick += solve(sum, idx+2, dp);
+            
+        }
+        return dp[idx] = max(pick, notPick);
+    }
+    int deleteAndEarn(vector<int>& nums) {
+        vector<int> sum(10001, 0);
+        int maxNum = 0;
+    
+        for (int num : nums) {
+            sum[num] += num;
+            maxNum = max(maxNum, num);
+        }
+        vector<int> dp(maxNum + 1, 0);
+    
+        dp[0] = 0;
+        dp[1] = sum[1];
+    
+        for (int i = 2; i <= maxNum; i++) {
+            dp[i] = max(dp[i-1], dp[i-2] + sum[i]);
+        }
+        
+        return dp[maxNum];
+    }
+};

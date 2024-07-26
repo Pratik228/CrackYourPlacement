@@ -1,0 +1,27 @@
+public:
+    //Function to find the maximum number of cuts.
+    int calmax(int n, int x, int y, int z, int sum, vector<int> &dp){
+        if(sum==n) return 0;
+        if(sum>n) return INT_MIN;
+        if(dp[sum]!=-1) return dp[sum];
+        int x_cut = 1 + calmax(n, x, y, z, sum+x, dp);
+        int y_cut = 1+ calmax(n, x, y, z, sum+y, dp);
+        int z_cut = 1+ calmax(n, x, y, z, sum+z, dp);
+        
+        return dp[sum] = max({x_cut, y_cut, z_cut});
+        
+    }
+    int maximizeTheCuts(int n, int x, int y, int z)
+    {
+        //Your code here
+        vector<int> dp(n + 1, INT_MIN);
+        dp[0] = 0;
+        
+        for (int i = 1; i <= n; i++) {
+            if (i >= x) dp[i] = max(dp[i], dp[i - x] + 1);
+            if (i >= y) dp[i] = max(dp[i], dp[i - y] + 1);
+            if (i >= z) dp[i] = max(dp[i], dp[i - z] + 1);
+        }
+        
+        return dp[n] < 0 ? 0 : dp[n];
+    }

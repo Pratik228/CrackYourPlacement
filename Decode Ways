@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int dfs(int idx, string &s){
+        if(idx==s.size()) return 1;
+        if(s[idx]=='0') return 0;
+        if(idx== s.size()-1) return 1;
+        int ways = dfs(idx+1, s);
+        if(idx + 1 < s.size() && (s[idx]=='1' || (s[idx]=='2' && s[idx+1]<='6' ))){
+            ways += dfs(idx+2, s);
+        }
+        return ways;
+
+    }
+    int numDecodings(string s) {
+        int n =s.size();
+        vector<int> dp(n+1, 0);
+        dp[n] = 1;
+        dp[n-1] = s[n-1] != '0' ? 1 : 0;
+        for(int i=n-1; i>=0; i--){
+            if (s[i] != '0'){
+            int ways = dp[i+1];
+            if(i + 1 < s.size() && (s[i]=='1' || (s[i]=='2' && s[i+1]<='6' ))){
+                ways += dp[i+2];
+            }
+            dp[i] = ways;
+            }
+        }
+        return dp[0];
+    }
+};

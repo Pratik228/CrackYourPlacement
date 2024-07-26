@@ -1,0 +1,45 @@
+Recursive and then tabulation approach
+
+class Solution {
+public:
+    int maxForm(vector<string>& strs, int idx, int m, int n){
+        if(idx==strs.size() || (m==0 && n==0)) return 0;
+        
+        int zeros = count(strs[idx].begin(), strs[idx].end(), '0');
+        int ones = strs[idx].size()-zeros;
+
+        if(zeros>m || ones>n) return maxForm(strs, idx+1, m, n);
+
+        int include = 1 + maxForm(strs, idx+1, m-zeros, n-ones);
+        int exclude = maxForm(strs, idx+1, m, n);
+        return max(include, exclude);
+
+    }
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        int l = strs.size();
+        vector<vector<vector<int>>> dp(l+1, vector<vector<int>>(m+1, vector<int>(n+1, 0)));
+        for (int j = 0; j <= m; j++) {
+            for (int k = 0; k <= n; k++) {
+                dp[l][j][k] = 0;
+            }
+        }
+        for (int i = l - 1; i >= 0; i--) {
+            int zeros = count(strs[i].begin(), strs[i].end(), '0');
+            int ones = strs[i].size() - zeros;
+            
+            for (int j = 0; j <= m; j++) {
+                for (int k = 0; k <= n; k++) {
+                    if (zeros > j || ones > k) {
+                        dp[i][j][k] = dp[i + 1][j][k];
+                    } else {
+                        int include = 1 + dp[i + 1][j - zeros][k - ones];
+                        int exclude = dp[i + 1][j][k];
+                        dp[i][j][k] = max(include, exclude);
+                    }
+                }
+            }
+        }
+        
+        return dp[0][m][n];
+    }
+};

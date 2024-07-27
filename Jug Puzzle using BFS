@@ -1,0 +1,93 @@
+#include <iostream>
+#include <queue>
+#include <set>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+typedef pair<int, int> pii;
+
+class Solution {
+private:
+    int jug1, jug2, target;
+    set<pii> visited;
+    map<pii, pii> parent;
+
+    vector<pii> getNextStates(pii current) {
+        int x = current.first, y = current.second;
+        vector<pii> next;
+        // Fill jug1
+        next.push_back({jug1, y});
+        // Fill jug2
+        next.push_back({x, jug2});
+        // Empty jug1
+        next.push_back({0, y});
+        // Empty jug2
+        next.push_back({x, 0});
+        // Pour jug1 to jug2
+        int pour = min(x, jug2 - y);
+        next.push_back({x - pour, y + pour});
+        // Pour jug2 to jug1
+        pour = min(jug1 - x, y);
+        next.push_back({x + pour, y - pour});
+        return next;
+    }
+
+public:
+    Solution(int m, int n, int d) : jug1(m), jug2(n), target(d) {}
+
+    vector<pii> solve() {
+        queue<pii> q;
+        q.push({0, 0});
+        visited.insert({0, 0});
+
+        while (!q.empty()) {
+            pii current = q.front();
+            q.pop();
+
+            if (current.first == target || current.second == target) {
+                return reconstructPath(current);
+            }
+
+            for (pii next : getNextStates(current)) {
+                if (visited.find(next) == visited.end()) {
+                    visited.insert(next);
+                    parent[next] = current;
+                    q.push(next);
+                }
+            }
+        }
+
+        return {}; // No solution found
+    }
+
+    vector<pii> reconstructPath(pii end) {
+        vector<pii> path;
+        while (end != make_pair(0, 0)) {
+            path.push_back(end);
+            end = parent[end];
+        }
+        path.push_back({0, 0});
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};
+
+int main() {
+    int m = 4, n = 3, d = 2;
+    Solution sol(m, n, d);
+    vector<pii> result = sol.solve();
+
+    if (result.empty()) {
+        cout << "No solution found" << endl;
+    } else {
+        cout << "Solution path:" << endl;
+        for (pii state : result) {
+            cout << "(" << state.first << ", " << state.second << ") ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}

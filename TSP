@@ -1,0 +1,51 @@
+#include <iostream>
+#include <vector>
+#include <cstring>
+using namespace std;
+
+const int MAX_N = 15;  
+const int INF = 1e9;   
+
+int n;
+int dist[MAX_N][MAX_N];  
+int dp[MAX_N][1 << MAX_N];  
+
+int tsp(int city, int mask) {
+    // If all cities are visited, return to the starting city
+    if (mask == (1 << n) - 1) {
+        return dist[city][0];
+    }
+
+    if (dp[city][mask] != -1) {
+        return dp[city][mask];
+    }
+
+    int ans = INF;
+
+    for (int nextCity = 0; nextCity < n; nextCity++) {
+        if ((mask & (1 << nextCity)) == 0) {  // If nextCity is not visited
+            int newAns = dist[city][nextCity] + tsp(nextCity, mask | (1 << nextCity));
+            if (newAns < ans) {
+                ans = newAns;
+            }
+        }
+    }
+    return dp[city][mask] = ans;
+}
+
+int main() {
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> dist[i][j];
+        }
+    }
+    memset(dp, -1, sizeof(dp));
+
+    // Solve TSP
+    int result = tsp(0, 1);  // Start from city 0
+
+    cout << "Minimum cost of TSP tour: " << result << endl;
+
+    return 0;
+}

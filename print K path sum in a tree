@@ -1,0 +1,20 @@
+void print(vector<int>& path, int start){
+    for(int k=start, k<path.size()-1; k++){
+        cout<<path[j]<<" "<<endl;
+    }
+}
+
+void pathSum(Node* root, vector<int>&path, int sum){
+    if(root==NULL) return;
+    
+    path.push_back(root->val);
+    
+    pathSum(root->left, path, sum);
+    pathSum(root->right, path, sum);
+    int psum=0;
+    for(int i=path.size()-1; i>=0; i--){
+        psum+=path[i];
+        if(psum==sum) print(path, i);
+    }
+    path.pop_back();
+}

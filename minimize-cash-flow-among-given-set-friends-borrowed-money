@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class CashFlow {
+private:
+    vector<int> netAmount;
+
+public:
+    CashFlow(int n) : netAmount(n, 0) {}
+
+    void addTransaction(int from, int to, int amount) {
+        netAmount[from] -= amount;
+        netAmount[to] += amount;
+    }
+
+    void minimizeCashFlow() {
+        while (true) {
+            int maxDebtor = max_element(netAmount.begin(), netAmount.end()) - netAmount.begin();
+            int maxCreditor = min_element(netAmount.begin(), netAmount.end()) - netAmount.begin();
+
+            if (netAmount[maxDebtor] == 0 && netAmount[maxCreditor] == 0) break;
+
+            int amount = min(netAmount[maxDebtor], -netAmount[maxCreditor]);
+            netAmount[maxDebtor] -= amount;
+            netAmount[maxCreditor] += amount;
+
+            cout << "Person " << maxDebtor << " pays $" << amount << " to Person " << maxCreditor << endl;
+        }
+    }
+};
+
+int main() {
+    CashFlow cf(3);
+    cf.addTransaction(0, 1, 1000);
+    cf.addTransaction(2, 0, 2000);
+    cf.addTransaction(1, 2, 5000);
+
+    cf.minimizeCashFlow();
+
+    return 0;
+}

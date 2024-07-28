@@ -1,0 +1,19 @@
+class Solution {
+public:
+    void findsubset(int idx, vector<int>& nums, vector<int>& num, vector<vector<int>>& result){
+        if(idx==nums.size()){
+            result.push_back(num);
+            return;
+        }
+        num.push_back(nums[idx]);
+        findsubset(idx+1, nums, num, result);
+        num.pop_back();
+        findsubset(idx+1, nums, num, result);
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<int> num;
+        vector<vector<int>> result;
+        findsubset(0, nums, num, result);
+        return result;
+    }
+};

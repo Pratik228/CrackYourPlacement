@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void findSum(int idx, vector<int> &nums, int target, vector<int> &take, vector<vector<int>> &ans ){
+        if(target==0){
+            ans.push_back(take);
+            return;
+        }
+        for(int i=idx; i<nums.size(); i++){
+            if(i>idx && nums[i]==nums[i-1]) continue;
+            if(nums[i]> target) break;
+                take.push_back(nums[i]);
+                findSum(i+1, nums, target-nums[i], take, ans);
+                take.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<vector<int>> ans;
+        vector<int> take;
+        sort(candidates.begin(), candidates.end());
+        findSum(0, candidates, target, take, ans);
+        return ans;
+    }
+};

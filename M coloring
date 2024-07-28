@@ -1,0 +1,26 @@
+bool isSafe(int idx, bool graph[101][101], vector<int>& color, int c, int n ){
+       for(int i=0; i<n; i++){
+           if(graph[idx][i] && color[i]==c) return false;
+       }
+       return true;
+       
+   }
+   
+   bool graphColor(int idx, bool graph[101][101], vector<int>& color, int m, int n){
+       if(idx==n) return true;
+       
+       for(int c=1; c<=m; c++){
+           if(isSafe(idx, graph, color, c, n)){
+               color[idx] = c;
+               if(graphColor(idx+1, graph, color, m, n)) return true;
+               color[idx]=0;
+           }
+       }
+       return false;
+   }
+   
+    bool graphColoring(bool graph[101][101], int m, int n) {
+        // your code here
+        vector<int> color(n, 0);
+        return graphColor(0, graph, color, m, n);
+    }

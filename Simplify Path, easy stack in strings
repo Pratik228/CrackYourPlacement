@@ -1,0 +1,25 @@
+class Solution {
+public:
+    string simplifyPath(string path) {
+        vector<string> components;
+        stringstream ss(path);
+        string component;
+
+        while(getline(ss, component, '/')){
+            if(component=="." || component.empty()) continue;
+            if(component=="..") {
+                if(!components.empty()) components.pop_back();
+            }else{
+                components.push_back(component);
+            }
+
+        }
+        string ans ="/";
+        for(int i=0; i<components.size(); i++){
+            ans += components[i];
+            if (i < components.size() - 1) ans += "/";
+        }
+        return ans;
+
+    }
+};

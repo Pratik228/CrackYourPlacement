@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void generateAll(string sForm, int n, int open, int close,  vector<string> &res){
+        if(open==n && close==n){
+            res.push_back(sForm);
+            return;
+        }
+        if(open<n){
+            generateAll(sForm+'(', n, open+1, close, res);
+        } 
+        if(close<open){
+            generateAll(sForm+')', n, open, close+1, res);
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        string sForm ="";
+        generateAll(sForm, n, 0, 0, res);
+        return res;
+    }
+};

@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+class Solution {
+public:
+    int optimalBST(vector<int>& keys, vector<int>& freq, int n) {
+
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+        
+        vector<int> prefixSum(n + 1, 0);
+        for (int i = 1; i <= n; i++) {
+            prefixSum[i] = prefixSum[i-1] + freq[i-1];
+        }
+    
+        for (int len = 1; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+                dp[i][j] = INT_MAX;
+                
+                // Try all roots
+                for (int r = i; r <= j; r++) {
+                    int leftCost = (r > i) ? dp[i][r-1] : 0;
+                    int rightCost = (r < j) ? dp[r+1][j] : 0;
+                    int currentCost = prefixSum[j+1] - prefixSum[i] + leftCost + rightCost;
+                    
+                    dp[i][j] = min(dp[i][j], currentCost);
+                }
+            }
+        }
+        
+        return dp[0][n-1];
+    }
+};
+
+int main() {
+    vector<int> keys = {10, 12, 20};
+    vector<int> freq = {34, 8, 50};
+    int n = keys.size();
+    
+    Solution sol;
+    cout << "Cost of Optimal BST is " << sol.optimalBST(keys, freq, n) << endl;
+    
+    return 0;
+}

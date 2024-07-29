@@ -1,0 +1,19 @@
+ int solveWordWrap(vector<int>nums, int k) 
+    { 
+        // Code here
+        int n = nums.size();
+        vector<int> dp(n, INT_MAX);
+        dp[n-1]=0;
+        
+        for(int i=n-2; i>=0; i--){
+            int lineLength =-1;
+            for(int j=i; j<n; j++){
+                lineLength += nums[j] +1;
+                if(lineLength>k) break;
+                int cost = (j==n-1) ? 0 : (k-lineLength)*(k-lineLength);
+                int remainingCost = (j==n-1)? 0: dp[j+1];
+                dp[i] = min(dp[i], cost+remainingCost);
+            }
+        }
+        return dp[0];
+    } 

@@ -1,0 +1,37 @@
+	int minStepToReachTarget(vector<int>&KnightPos,vector<int>&TargetPos,int N)
+	{
+	    // Code here
+	    int startX = KnightPos[0]-1;
+	    int startY = KnightPos[1]-1;
+	    int endX = TargetPos[0]-1;
+	    int endY = TargetPos[1]-1;
+	    
+	    vector<pair<int, int>> directions = {
+            {-2, -1}, {-2, 1}, {-1, -2}, {-1, 2},
+            {1, -2}, {1, 2}, {2, -1}, {2, 1}
+        };
+        
+        vector<vector<int>> visited(N, vector<int>(N,0));
+        visited[startX][startY] = 1;
+        queue<pair<int, pair<int, int>>> q;
+        q.push({0, {startX, startY}});
+        int count;
+        while(!q.empty()){
+            count = q.front().first;
+            int row = q.front().second.first;
+            int col = q.front().second.second;
+            q.pop();
+            if(row==endX && col==endY) return count;
+            
+            for(auto move : directions){
+                int nrow = row + move.first;
+                int ncol = col + move.second;
+                
+                if(nrow<N && nrow>=0 && ncol<N && ncol>=0 && !visited[nrow][ncol]){
+                    visited[nrow][ncol]=1;
+                    q.push({count+1, {nrow, ncol}});
+                }
+            }
+        }
+        return -1;
+	}

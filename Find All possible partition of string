@@ -1,0 +1,30 @@
+ public:
+    bool isPalindrome(string S, int start, int end){
+        while(start<end){
+            if(S[start]!=S[end]) return false;
+            start++;
+            end--;
+        }
+        return true;
+    }
+    void backtrack(int idx, vector<vector<string>> &ans, vector<string> found, string S){
+        if(idx==S.size()){
+            ans.push_back(found);
+            return;
+        }
+        
+        for(int i=idx; i<S.size(); i++){
+            if(isPalindrome(S, idx, i)){
+                found.push_back(S.substr(idx, i - idx + 1));
+                backtrack(i+1, ans, found, S);
+                found.pop_back();
+            }
+        }
+    }
+    vector<vector<string>> allPalindromicPerms(string S) {
+        // code here
+        vector<vector<string>> ans;
+        vector<string> found;
+        backtrack(0, ans, found, S);
+        return ans;
+    }

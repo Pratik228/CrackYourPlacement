@@ -1,0 +1,57 @@
+optimized
+
+class Solution {
+public:
+    int countArrangement(int n) {
+        vector<int> state(n + 1);
+        for (int i = 1; i <= n; ++i) {
+            state[i] = i;
+        }
+        return countArrangements(n, state);
+    }
+
+private:
+    int countArrangements(int pos, vector<int>& state) {
+        if (pos == 0) return 1;
+        
+        int count = 0;
+        for (int i = pos; i > 0; --i) {
+            if (state[i] % pos == 0 || pos % state[i] == 0) {
+                swap(state[pos], state[i]);
+                count += countArrangements(pos - 1, state);
+                swap(state[pos], state[i]);  // backtrack
+            }
+        }
+        return count;
+    }
+};
+
+
+basic
+
+class Solution {
+public:
+int count = 0;
+vector<bool> used;
+
+void beautiful(int n, int pos){
+    if(pos>n){
+        count++;
+        return;
+    }
+
+    for(int i=1; i<=n; i++){
+        if(!used[i] && (i%pos==0 || pos%i==0)){
+            used[i]=true;
+            beautiful(n, pos+1);
+            used[i]=false;
+        }
+    }
+
+}
+int countArrangement(int n) {
+        used.resize(n+1);
+        beautiful(n, 1);
+        return count;
+    }
+};

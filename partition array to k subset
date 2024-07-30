@@ -1,0 +1,26 @@
+bool canPartition(int a[], int n, int k, int currentSum, int targetSum, int start, vector<bool>& used) {
+        if (k == 1) return true;  
+        if (currentSum == targetSum) return canPartition(a, n, k-1, 0, targetSum, 0, used);
+        
+        for (int i = start; i < n; i++) {
+            if (used[i] || currentSum + a[i] > targetSum) continue;
+            
+            used[i] = true;
+            if (canPartition(a, n, k, currentSum + a[i], targetSum, i+1, used)) return true;
+            used[i] = false;
+        }
+        
+        return false;
+    }
+    
+    bool isKPartitionPossible(int a[], int n, int k) {
+        int sum = 0;
+        for (int i = 0; i < n; i++) sum += a[i];
+        
+        if (sum % k != 0) return false;
+        
+        int targetSum = sum / k;
+        vector<bool> used(n, false);
+        
+        return canPartition(a, n, k, 0, targetSum, 0, used);
+    }

@@ -1,0 +1,35 @@
+string maxNumber;
+    void backtrack(string str, int k, int index) {
+        if (k == 0 || index == str.length() - 1) {
+            maxNumber = max(maxNumber, str);
+            return;
+        }
+
+        char maxChar = str[index];
+        for (int j = index + 1; j < str.length(); j++) {
+            if (str[j] > maxChar) {
+                maxChar = str[j];
+            }
+        }
+
+        if (maxChar != str[index]) {
+            k--;
+        }
+
+        for (int j = str.length() - 1; j >= index; j--) {
+            if (str[j] == maxChar) {
+                swap(str[index], str[j]);
+                backtrack(str, k, index + 1);
+                swap(str[index], str[j]);
+            }
+        }
+
+        backtrack(str, k, index + 1);
+    }
+    string findMaximumNum(string str, int k)
+    {
+       // code here.
+       maxNumber=str;
+       backtrack(str, k, 0);
+       return maxNumber;
+    }

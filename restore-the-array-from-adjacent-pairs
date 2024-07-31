@@ -1,0 +1,64 @@
+//optimized
+class Solution {
+public:
+    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+        int n = adjacentPairs.size()+1;
+        unordered_map<int, vector<int>> adj;
+        vector<int> ans(n);
+        for(auto it: adjacentPairs){
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+
+        int start;
+        for(auto it: adj){
+            if(it.second.size()==1) {
+                start = it.first;
+                break;
+            }
+        }
+      
+        ans[0] = start;
+        int prev = INT_MAX;
+        for (int i = 1; i < n; i++) {
+            auto& neighbors = adj[ans[i-1]];
+            ans[i] = (neighbors[0] != prev) ? neighbors[0] : neighbors[1];
+            prev = ans[i-1];
+        }
+        
+        return ans;
+    }
+};
+
+
+// class Solution {
+// public:
+//     void dfs(int node, int prev, unordered_map<int, vector<int>> &adj, vector<int> &ans){
+//         ans.push_back(node);
+//         for(auto it: adj[node]){
+//             if(it!=prev){
+//                 dfs(it, node, adj, ans);
+//             }
+//         }
+//     }
+//     vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+//         int n = adjacentPairs.size()+1;
+//         unordered_map<int, vector<int>> adj;
+//         vector<int> ans;
+//         for(auto it: adjacentPairs){
+//             adj[it[0]].push_back(it[1]);
+//             adj[it[1]].push_back(it[0]);
+//         }
+
+//         int start;
+//         for(auto it: adj){
+//             if(it.second.size()==1) {
+//                 start = it.first;
+//                 break;
+//             }
+//         }
+    
+//         dfs(start, INT_MAX, adj, ans);
+//         return ans;
+//     }
+// };

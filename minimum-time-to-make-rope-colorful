@@ -1,0 +1,30 @@
+
+class Solution {
+public:
+      int minCost(string colors, vector<int>& neededTime) {
+        int time = 0;
+        int maxSum=0;
+        int groupSum=0;
+        for(int i=0; i<colors.size(); i++){
+            if(i>0 && colors[i]!=colors[i-1]){
+                time += groupSum-maxSum;
+                groupSum =0;
+                maxSum=0;
+            }   
+                groupSum += neededTime[i];
+                maxSum = max(neededTime[i], maxSum);
+        }
+        time += groupSum-maxSum;
+        return time;
+    }
+    //this will fail for aaaa  cases all are adjacent
+    // int minCost(string colors, vector<int>& neededTime) {
+    //     int time = 0;
+    //     for(int i=1; i<colors.size(); i++){
+    //         if(colors[i]==colors[i-1]){
+    //             time += min(neededTime[i], neededTime[i-1]);
+    //         }
+    //     }
+    //     return time;
+    // }
+};

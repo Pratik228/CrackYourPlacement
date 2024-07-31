@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int minCost(int m, int n, vector<int>&x, vector<int>&y){
+    vector<pair<int, bool>> cuts;
+    for(int cost: x) cuts.push_back({cost, false});
+    for(int cost: y) cuts.push_back({cost, true});
+    sort(cuts.rbegin(), cuts.rend());
+    int totalCost = 0;
+    int horizontal = 1, vertical = 1;
+    for(auto [cost, isHorizontal] : cuts){
+        if(isHorizontal){
+            totalCost += cost * vertical;
+            horizontal++;
+        }else{
+            totalCost += cost * horizontal;
+            vertical++;
+        }
+    }
+    return totalCost;
+}
+
+int main() {
+    int t;
+    cin >> t;
+    
+    while (t--) {
+        int m, n;
+        cin >> m >> n;
+        
+        vector<int> x(m-1), y(n-1);
+        for (int& cost : x) cin >> cost;
+        for (int& cost : y) cin >> cost;
+        
+        cout << minCost(m, n, x, y) << endl;
+        
+        if (t) cout << endl; 
+    }
+    
+    return 0;
+}

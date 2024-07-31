@@ -1,0 +1,48 @@
+class Solution {
+private:
+    int merge(vector<long long>& sum, int left, int mid, int right, int lower, int upper){
+        int count=0;
+        int j=mid+1, k=mid+1;
+        for(int i=left; i<=mid; i++){
+            //taking left finding in the right half
+            while (j <= right && sum[j] - sum[i] < lower) j++;
+            while (k <= right && sum[k] - sum[i] <= upper) k++;
+            count += k - j;
+        }
+        vector<long long> temp(right - left + 1);
+        int i = left, l = mid + 1, t = 0;
+        while (i <= mid && l <= right) {
+            if (sum[i] <= sum[l]) {
+                temp[t++] = sum[i++];
+            } else {
+                temp[t++] = sum[l++];
+            }
+        }
+        while (i <= mid) temp[t++] = sum[i++];
+        while (l <= right) temp[t++] = sum[l++];
+        for (int i = 0; i < temp.size(); i++) {
+            sum[left + i] = temp[i];
+        }
+
+        return count;
+
+    }
+    int mergeSort(vector<long long>& sum, int left, int right, int lower, int upper){
+        if(left>=right) return 0;
+        int mid = (left+right)/2;
+        int count = mergeSort(sum, left, mid, lower, upper) +
+        mergeSort(sum, mid+1, right, lower, upper);
+        return count + merge(sum, left, mid, right, lower, upper);
+
+    }
+public:
+    int countRangeSum(vector<int>& nums, int lower, int upper) {
+        int n = nums.size();
+        vector<long long> sum(n + 1, 0);
+        for (int i = 0; i < n; i++) {
+            sum[i + 1] = sum[i] + nums[i];
+        }
+        
+        return mergeSort(sum, 0, n , lower, upper);
+    }
+};

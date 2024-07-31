@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+class OptimalBST {
+private:
+    vector<int> keys;
+    vector<int> freq;
+    vector<vector<int>> cost;
+    vector<vector<int>> root;
+    vector<vector<int>> weight;
+    int n;
+
+public:
+    OptimalBST(vector<int>& k, vector<int>& f) : keys(k), freq(f) {
+        n = keys.size();
+        cost = vector<vector<int>>(n, vector<int>(n, 0));
+        root = vector<vector<int>>(n, vector<int>(n, 0));
+        weight = vector<vector<int>>(n, vector<int>(n, 0));
+    }
+
+    void computeOptimalBST() {
+        for (int i = 0; i < n; i++) {
+            weight[i][i] = freq[i];
+            cost[i][i] = freq[i];
+            root[i][i] = i;
+        }
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+                weight[i][j] = weight[i][j-1] + freq[j];
+                cost[i][j] = INT_MAX;
+
+                // Try all roots between i and j
+                for (int r = i; r <= j; r++) {
+                    int c = ((r > i) ? cost[i][r-1] : 0) +
+                            ((r < j) ? cost[r+1][j] : 0) +
+                            weight[i][j];
+                    if (c < cost[i][j]) {
+                        cost[i][j] = c;
+                        root[i][j] = r;
+                    }
+                }
+            }
+        }
+    }
+
+    void printOptimalBST() {
+        cout << "Optimal BST cost: " << cost[0][n-1] << endl;
+        cout << "Root of optimal BST: " << keys[root[0][n-1]] << endl;
+        
+        cout << "\nCost table:" << endl;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                cout << cost[i][j] << "\t";
+            }
+            cout << endl;
+        }
+
+        cout << "\nRoot table:" << endl;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                cout << keys[root[i][j]] << "\t";
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    vector<int> keys = {10, 20, 30, 40};
+    vector<int> freq = {3, 3, 1, 1};
+
+    OptimalBST obst(keys, freq);
+    obst.computeOptimalBST();
+    obst.printOptimalBST();
+
+    return 0;
+}

@@ -1,0 +1,51 @@
+class Solution {
+public:
+    // unordered_set<int> stoneS;
+    // bool canJump(vector<int>& stones, int position, int k){
+    //     if(position ==stones.back()) return true;
+
+    //     for(int jump=k-1; jump<=k+1; jump++){
+    //         if(jump>0){
+    //             int newPosition = jump + position;
+    //             if(stoneS.count(newPosition) && canJump(stones, newPosition, jump))
+    //                 return true;
+    //         }
+            
+    //     }
+    //     return false;
+    // }
+
+    bool canCross(vector<int>& stones) {
+        int n = stones.size();
+        if(stones[1]!=1) return false;
+        unordered_map<int, int> stoneS;
+        for(int i=0; i<n; i++){
+            stoneS[stones[i]] = i;
+        }
+        vector<vector<bool>> dp(n, vector<bool>(n+1, false));
+
+        dp[1][1]=true;
+
+        for(int i=1; i<n; i++){
+            for(int j=1; j<=i; j++){
+                if(dp[i][j]){
+                    for(int jump=j-1; jump<=j+1; jump++){
+                        if(jump>0){
+                            int newPosition = jump + stones[i];
+                            if(stoneS.count(newPosition)){
+                                int nextIndex = stoneS[newPosition];
+                                dp[nextIndex][jump] =true;
+                            }
+                        }
+                            
+                    }
+                }
+            }
+        }
+        for (int j = 1; j < n; j++) {
+            if (dp[n-1][j]) return true;
+        }
+
+        return false;
+    }
+};

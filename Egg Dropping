@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int solve(int egg, int floor){
+        if(floor==0 || floor==1) return floor;
+        if(egg==1) return floor;
+        int mini = INT_MAX;
+        for(int k=1; k<=floor; k++){
+            int attempt = 1 + max(solve(egg-1, k-1), solve(egg, floor-k));
+            mini = min(attempt, mini);
+        }   
+        
+        return mini;
+    }
+    int superEggDrop(int k, int n) {
+        if(k==1) return n;
+        vector<vector<int>> dp(k+1, vector<int>(n+1, 1e9));
+        for(int i=1; i<=k; i++) {
+            dp[i][0]=0;
+            dp[i][1] =1;
+        }
+        for(int j = 1; j <= n; j++) {
+            dp[1][j] = j;
+        }
+        for(int egg = 2; egg <= k; egg++) {
+            for(int floor = 2; floor <= n; floor++) {
+                for(int x = 1; x <= floor; x++) {
+                    int attempt = 1 + max(dp[egg-1][x-1], dp[egg][floor-x]);
+                    dp[egg][floor] = min(dp[egg][floor], attempt);
+                }
+            }
+        }
+        return dp[k][n];
+    }
+};

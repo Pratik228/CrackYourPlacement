@@ -1,0 +1,35 @@
+class Solution {
+private:
+    const int MOD = 1e9 + 7;
+    vector<vector<int>> memo;
+    
+    int count(const string& s, int i, int j) {
+        if (i > j) return 0;
+        if (i == j) return 1;
+        if (memo[i][j] != -1) return memo[i][j];
+        
+        long long result = 0;
+        
+        if (s[i] == s[j]) {
+            result = count(s, i+1, j-1) * 2;
+            int left = i + 1, right = j - 1;
+            while (left <= right && s[left] != s[i]) left++;
+            while (left <= right && s[right] != s[i]) right--;
+            
+            if (left > right) result += 2;  //  0 repeated 
+            else if (left == right) result += 1;  // 1 repeated 
+            else result -= count(s, left+1, right-1);  // repeated > 1
+        } else {
+            result = count(s, i, j-1) + count(s, i+1, j) - count(s, i+1, j-1);
+        }
+        
+        return memo[i][j] = (result + MOD) % MOD;
+    }
+
+public:
+    int countPalindromicSubsequences(string s) {
+        int n = s.length();
+        memo.assign(n, vector<int>(n, -1));
+        return count(s, 0, n-1);
+    }
+};

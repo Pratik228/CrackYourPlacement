@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+int largestEqualSubmatrix(vector<vector<int>>& matrix) {
+    int rows = matrix.size();
+    if (rows == 0) return 0;
+    int cols = matrix[0].size();
+    
+    int maxArea = 0;
+    vector<vector<int>> prefixSum(rows + 1, vector<int>(cols, 0));
+    
+    for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++) {
+            prefixSum[i + 1][j] = prefixSum[i][j] + (matrix[i][j] == 0 ? -1 : 1);
+        }
+    }
+    
+    for (int top = 0; top < rows; top++) {
+        for (int bottom = top; bottom < rows; bottom++) {
+            unordered_map<int, int> sumIndex;
+            sumIndex[0] = -1;
+            int currSum = 0;
+            
+            for (int j = 0; j < cols; j++) {
+                currSum += prefixSum[bottom + 1][j] - prefixSum[top][j];
+                
+                if (sumIndex.find(currSum) != sumIndex.end()) {
+                    int width = j - sumIndex[currSum];
+                    int height = bottom - top + 1;
+                    maxArea = max(maxArea, width * height);
+                } else {
+                    sumIndex[currSum] = j;
+                }
+            }
+        }
+    }
+    
+    return maxArea;
+}
+
+int main() {
+    vector<vector<int>> matrix = {
+        {0, 0, 1, 1},
+        {0, 1, 1, 0},
+        {1, 1, 1, 0},
+        {1, 0, 0, 1}
+    };
+    
+    cout << "Largest area: " << largestEqualSubmatrix(matrix) << endl;
+    return 0;
+}

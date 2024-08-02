@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+class TugOfWar {
+private:
+    vector<int> arr;
+    vector<int> set1, set2;
+    int minDiff;
+    vector<int> ansSet1, ansSet2;
+
+    void solve(int idx, int sumSet1, int sumSet2) {
+        if (idx == arr.size()) {
+            int diff = abs(sumSet1 - sumSet2);
+            if (diff < minDiff) {
+                minDiff = diff;
+                ansSet1 = set1;
+                ansSet2 = set2;
+            }
+            return;
+        }
+        if (set1.size() < (arr.size() + 1) / 2) {
+            set1.push_back(arr[idx]);
+            solve(idx + 1, sumSet1 + arr[idx], sumSet2);
+            set1.pop_back();
+        }
+        if (set2.size() < (arr.size() + 1) / 2) {
+            set2.push_back(arr[idx]);
+            solve(idx + 1, sumSet1, sumSet2 + arr[idx]);
+            set2.pop_back();
+        }
+    }
+
+public:
+    TugOfWar(vector<int>& input) : arr(input), minDiff(INT_MAX) {}
+
+    void findSolution() {
+        solve(0, 0, 0);
+
+        cout << "Set 1: ";
+        for (int num : ansSet1) cout << num << " ";
+        cout << "\nSet 2: ";
+        for (int num : ansSet2) cout << num << " ";
+        cout << "\nMinimum difference: " << minDiff << endl;
+    }
+};
+
+int main() {
+    vector<int> arr = {3, 4, 5, -3, 100, 1, 89, 54, 23, 20};
+    TugOfWar tow(arr);
+    tow.findSolution();
+    return 0;
+}

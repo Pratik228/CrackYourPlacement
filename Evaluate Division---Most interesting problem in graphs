@@ -1,0 +1,43 @@
+class Solution {
+public:
+    bool dfs(string src, string dest, unordered_map<string, vector<pair<string, double>>>& adj, 
+             unordered_set<string>& visited, double& value) {
+        if (src == dest) return true;
+        visited.insert(src);
+        
+        for (auto& [next, val] : adj[src]) {
+            if (visited.find(next) == visited.end()) {
+                value *= val;
+                if (dfs(next, dest, adj, visited, value)) return true;
+                value /= val;  // backtrack
+            }
+        }
+        return false;
+    }
+
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, 
+                                vector<vector<string>>& queries) {
+        unordered_map<string, vector<pair<string, double>>> adj;
+        for (int i = 0; i < equations.size(); i++) {
+            adj[equations[i][0]].push_back({equations[i][1], values[i]});
+            adj[equations[i][1]].push_back({equations[i][0], 1.0 / values[i]});
+        }
+        
+        vector<double> ans;
+        for (const auto& query : queries) {
+            string src = query[0], dest = query[1];
+            if (adj.find(src) == adj.end() || adj.find(dest) == adj.end()) {
+                ans.push_back(-1.0);
+            } else {
+                unordered_set<string> visited;
+                double value = 1.0;
+                if (dfs(src, dest, adj, visited, value)) {
+                    ans.push_back(value);
+                } else {
+                    ans.push_back(-1.0);
+                }
+            }
+        }
+        return ans;
+    }
+};

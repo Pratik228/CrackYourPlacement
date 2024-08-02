@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+class CryptarithmeticSolver {
+private:
+    string word1, word2, result;
+    unordered_map<char, int> char_to_digit;
+    vector<bool> used_digits;
+    string all_chars;
+
+    bool is_valid() {
+        int num1 = 0, num2 = 0, num_result = 0;
+        for (char c : word1) num1 = num1 * 10 + char_to_digit[c];
+        for (char c : word2) num2 = num2 * 10 + char_to_digit[c];
+        for (char c : result) num_result = num_result * 10 + char_to_digit[c];
+        return num1 + num2 == num_result && char_to_digit[word1[0]] && char_to_digit[word2[0]] && char_to_digit[result[0]];
+    }
+
+    bool solve(int idx = 0) {
+        if (idx == all_chars.length()) return is_valid();
+        char c = all_chars[idx];
+        for (int d = 0; d < 10; d++) {
+            if (!used_digits[d]) {
+                char_to_digit[c] = d;
+                used_digits[d] = true;
+                if (solve(idx + 1)) return true;
+                used_digits[d] = false;
+            }
+        }
+        return false;
+    }
+
+public:
+    CryptarithmeticSolver(const string& w1, const string& w2, const string& res)
+        : word1(w1), word2(w2), result(res), used_digits(10, false) {
+        all_chars = w1 + w2 + res;
+        sort(all_chars.begin(), all_chars.end());
+        all_chars.erase(unique(all_chars.begin(), all_chars.end()), all_chars.end());
+    }
+
+    void solve_and_print() {
+        if (solve()) {
+            cout << "Solution found:" << endl;
+            for (char c : all_chars)
+                cout << c << " = " << char_to_digit[c] << endl;
+        } else {
+            cout << "No solution found." << endl;
+        }
+    }
+};
+
+int main() {
+    CryptarithmeticSolver("SEND", "MORE", "MONEY").solve_and_print();
+    return 0;
+}

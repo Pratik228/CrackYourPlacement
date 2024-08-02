@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<string> stringStack;
+        stack<int> countStack;
+        string currentString;
+        int currentCount = 0;
+
+        for(char ch: s){
+            if(isdigit(ch)){
+                currentCount = currentCount*10 + (ch-'0');
+            }
+            else if(ch=='['){
+                countStack.push(currentCount);
+                currentCount=0;
+                stringStack.push(currentString);
+                currentString="";
+            }
+            else if(ch==']'){
+                int repeat = countStack.top();
+                countStack.pop(); 
+                string str = stringStack.top();
+                stringStack.pop();
+                for(int i=0; i<repeat; i++){
+                    str += currentString;
+                }
+                currentString = str;
+            }
+            else{
+                currentString +=ch;
+            }
+        }
+        
+        return currentString;
+    }
+};

@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Solution {
+private:
+    int n;
+    vector<pair<int, int>> path;
+    vector<vector<bool>> visited;
+    bool found;
+
+    vector<int> dx = {-1, 0, 1, 0};
+    vector<int> dy = {0, 1, 0, -1};
+
+    bool isValid(int x, int y) {
+        return x >= 0 && x < n && y >= 0 && y < n;
+    }
+
+    bool isMid(int x, int y) {
+        return x == n/2 && y == n/2;
+    }
+
+    void dfs(vector<vector<int>>& maze, int x, int y) {
+        if (!isValid(x, y) || visited[x][y] || found) return;
+
+        path.push_back({x, y});
+        visited[x][y] = true;
+
+        if (isMid(x, y)) {
+            found = true;
+            printPath();
+            return;
+        }
+
+        int steps = maze[x][y];
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i] * steps;
+            int ny = y + dy[i] * steps;
+            dfs(maze, nx, ny);
+        }
+
+        if (!found) {
+            path.pop_back();
+            visited[x][y] = false;
+        }
+    }
+
+    void printPath() {
+        for (auto& p : path) {
+            cout << "(" << p.first << ", " << p.second << ") -> ";
+        }
+        cout << "MID" << endl;
+    }
+
+public:
+    void solveMaze(vector<vector<int>>& maze) {
+        n = maze.size();
+        visited.resize(n, vector<bool>(n, false));
+        found = false;
+
+        vector<pair<int, int>> corners = {{0, 0}, {0, n-1}, {n-1, 0}, {n-1, n-1}};
+        for (auto& corner : corners) {
+            path.clear();
+            fill(visited.begin(), visited.end(), vector<bool>(n, false));
+            dfs(maze, corner.first, corner.second);
+            if (found) break;
+        }
+
+        if (!found) {
+            cout << "No path found to the middle." << endl;
+        }
+    }
+};
